@@ -4,7 +4,7 @@
 import can
 
 # Connect to the CAN bus using python-can
-can0 = can.interface.Bus(channel='can0', interface='socketcan')
+can0 = can.interface.Bus(channel='can0', bustype='socketcan', bitrate=1000000, fd=True, data_bitrate=2000000)
 
 try:
     while True:
