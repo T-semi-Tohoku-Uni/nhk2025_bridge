@@ -23,19 +23,22 @@ class CanBridge(Node):
     def __call__(self, msg:can.Message):
         rxdata_f32 = self.bridge.nhk2025_byte_to_f32(msg.data)
 
+        txdata = Bool()
+        txdata.data = bool(rxdata_f32[0])
+        self.publisher_soten.publish(txdata)
         if msg.arbitration_id == 0x206:
-            txdata = Bool()
-            txdata.data = bool(rxdata_f32[0])
-            self.publisher_soten.publish(txdata)
+            pass
+            
 
 
 def main_canbridge():
     rclpy.init()
     can_bridge = CanBridge()
-    while True:
-        try:
+    
+    try:
+        while True:
             can_bridge(can_bridge.can0.recv())
-        except KeyboardInterrupt:
+    except KeyboardInterrupt:
             pass
-        finally:
-            rclpy.shutdown()
+    finally:
+        rclpy.shutdown()
