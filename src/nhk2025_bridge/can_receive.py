@@ -5,7 +5,7 @@ can0 = can.interface.Bus(channel='can0', bustype='socketcan', bitrate=1000000, f
 try:
     while True:
         msg = can0.recv()
-        print(msg)
+        print(msg.data)
 except KeyboardInterrupt:
     pass
 finally:
