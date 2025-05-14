@@ -35,5 +35,6 @@ def main_can_send():
     except KeyboardInterrupt:
         pass
     finally:
+        can_send.can0.shutdown()
         can_send.destroy_node()
         rclpy.shutdown()
