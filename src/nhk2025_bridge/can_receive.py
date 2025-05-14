@@ -8,12 +8,7 @@ try:
     while True:
         msg = can0.recv()
         print(msg.data)
-        msg.data.reverse()
-        bytelist = [msg.data[:4], msg.data[4:8], msg.data[8:12]]
-        print(bytelist)
-        for i in range(3):
-            f32 = bridge.byte_to_f32(bytes(bytelist[i]))
-            print(f32)
+        print(bridge.nhk2025_byte_to_f32(msg.data))
 except KeyboardInterrupt:
     pass
 finally:
