@@ -18,10 +18,13 @@ class CanSend(Node):
     def timer_callback(self):
         txdata_f32 = [23, 43, 99.89]
         txdata_byte = self.bridge.nhk2025_f32_to_byte(txdata_f32)
-        txdata = can.Message()
-        txdata.arbitration_id = 0x200,
-        txdata.data = txdata_byte
-        txdata.dlc = 12
+        txdata = can.Message(
+            arbitration_id=0x200,
+            is_extended_id=False,
+            dlc=12,
+            data=txdata_byte,
+            is_fd=True,
+        )
         self.can0.send(txdata)
 
 def main_can_send():
