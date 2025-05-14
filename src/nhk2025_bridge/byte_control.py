@@ -15,6 +15,7 @@ class ValueBridge():
         return f32
     
     def nhk2025_f32_to_byte(self, f32_list:list):
+        byte_list = bytes()
         for f32 in f32_list:
             byte_list += self.f32_to_byte(f32)
         return bytearray(byte_list)
