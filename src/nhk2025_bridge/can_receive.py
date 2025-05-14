@@ -1,3 +1,6 @@
+import rclpy
+from rclpy.node import Node
+
 import can
 from nhk2025_bridge.byte_control import ValueBridge
 
