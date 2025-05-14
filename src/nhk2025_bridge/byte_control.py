@@ -14,12 +14,12 @@ class ValueBridge():
         f32 = float(f32_ndarray[0])
         return f32
     
-    def nhk2025_f32_to_byte(self, f32_list):
+    def nhk2025_f32_to_byte(self, f32_list:list):
         for f32 in f32_list:
             byte_list += self.f32_to_byte(f32)
         return bytearray(byte_list)
     
-    def nhk2025_byte_to_f32(self, byte_list):
+    def nhk2025_byte_to_f32(self, byte_list:bytearray):
         f32_list = []
         byte_list.reverse()
         bytelist = [byte_list[:4], byte_list[4:8], byte_list[8:12]]
