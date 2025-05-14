@@ -63,6 +63,17 @@ class Ros2Can(Node):
             10
         )
 
+        self.canid_dic = {
+            "vel":0x300,
+            "loading_speed":0x301,
+            "turret_angle":0x302,
+            "velt_speed":0x303,
+            "brake":0x304,
+            "swervedrive_state":0x203,
+            "soten_flag":0x206,
+            "pass_speed":0x207
+        }
+
         self.subscriber_vel
         self.subscriber_tur
         self.subscriber_soten
