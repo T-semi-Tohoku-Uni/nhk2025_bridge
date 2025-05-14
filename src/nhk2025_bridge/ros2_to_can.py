@@ -83,20 +83,23 @@ class Ros2Can(Node):
         self.state_bogai
         self.state_kaihei
 
-    def vel_callback(self, rxdata):
-        vx    = rxdata.x
-        vy    = rxdata.y
-        omega = rxdata.theta
-        txdata_f32 = [vx, vy, omega]
-        txdata_byte_list = self.bridge.nhk2025_f32_to_byte(txdata_f32)
+    def can_send(self, txdata_list:list, msg_name:str):
+        txdata_byte_list = self.bridge.nhk2025_f32_to_byte(txdata_list)
         txdata_can = can.Message(
-            arbitration_id=self.canid_dic["vel"],
+            arbitration_id=self.canid_dic[msg_name],
             is_extended_id=False,
             dlc=12,
             data=txdata_byte_list,
             is_fd=True,
         )
         self.can0.send(txdata_can)
+
+    def vel_callback(self, rxdata):
+        vx    = rxdata.x
+        vy    = rxdata.y
+        omega = rxdata.theta
+        txdata_f32 = [vx, vy, omega]
+        self.can_send(txdata_f32, "vel")
 
     def tur_callback(self, rxdata):
         tur_ele = rxdata.num[0]
