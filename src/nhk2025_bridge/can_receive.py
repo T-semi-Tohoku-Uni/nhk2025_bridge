@@ -23,7 +23,7 @@ class CanBridge(Node):
     def __call__(self, msg:can.Message):
         rxdata_f32 = self.bridge.nhk2025_byte_to_f32(msg.data)
 
-        if msg.arbitration_id is 0x206:
+        if msg.arbitration_id == 0x206:
             txdata = Bool()
             txdata.data = bool(rxdata_f32[0])
             self.publisher_soten.publish(txdata)
