@@ -111,8 +111,10 @@ class Ros2Can(Node):
         self.can_send(txdata_f32, 'pass_speed')
 
     def defence_callback(self, rxdata):
-        if rxdata.data:
-            self.status_bougai = "1"
+        defence_flag = int(rxdata.data)
+        txdata_f32 = [defence_flag, 0, 0]
+        self.can_send(txdata_f32, 'defence')
+            
 
 
 def main_ros2_to_can():
