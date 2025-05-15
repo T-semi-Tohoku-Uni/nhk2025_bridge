@@ -104,8 +104,8 @@ class Ros2Can(Node):
     def tur_callback(self, rxdata):
         tur_ele = rxdata.num[0]
         tur_azi = rxdata.num[1]
-        self.tur_ele_str = "{:+.2f}".format(tur_ele)
-        self.tur_azi_str = "{:+.2f}".format(tur_azi)
+        txdata_f32 = [tur_ele, tur_azi, 0]
+        self.can_send(txdata_f32, "turret_angle")
 
     def soten_callback(self, rxdata):
         self.soten_flag = str(int(rxdata.data))
