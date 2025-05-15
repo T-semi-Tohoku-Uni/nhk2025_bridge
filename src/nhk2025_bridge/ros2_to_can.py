@@ -14,7 +14,8 @@ class Ros2Can(Node):
         self.bridge = ValueBridge()
         super().__init__('ros2_to_can')
         self.can0 = can.interface.Bus(channel='can0', bustype='socketcan', bitrate=1000000, fd=True, data_bitrate=2000000)
-        self.ros2_setup()
+        self.subscriber_setup()
+        self.state_control_setup()
 
         self.canid_dic = {
             "vel":0x300,
@@ -26,7 +27,7 @@ class Ros2Can(Node):
             "pass_speed":0x207
         }
 
-    def ros2_setup(self):
+    def subscriber_setup(self):
         self.subscriber_vel = self.create_subscription(
             Pose2D,
             "/robot_vel",
@@ -77,6 +78,16 @@ class Ros2Can(Node):
         self.state_bogai
         self.subscriber_brake
 
+        self.can_state = False
+
+    def state_control_setup(self):
+        self.publisher_can_state = self.create_publisher(
+            Bool,
+            '/can_state',
+            10
+        )
+        self.txdata_can_state = Bool()
+
     def can_send(self, txdata_list:list, msg_name:str):
         txdata_byte_list = self.bridge.nhk2025_f32_to_byte(txdata_list)
         txdata_can = can.Message(
@@ -86,7 +97,15 @@ class Ros2Can(Node):
             data=txdata_byte_list,
             is_fd=True,
         )
-        self.can0.send(txdata_can)
+        try:
+            self.can_state = True
+            self.txdata_can_state.data = self.can_state
+            self.publisher_can_state.publish(self.txdata_can_state)
+            self.can0.send(txdata_can)
+        except can.CanError:
+            self.can_state = False
+            self.txdata_can_state.data = self.can_state
+            self.publisher_can_state.publish(self.txdata_can_state)
 
     def vel_callback(self, rxdata):
         vx    = rxdata.x

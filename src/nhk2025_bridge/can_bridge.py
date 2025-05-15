@@ -55,7 +55,7 @@ class CanBridge(Node):
         msg = self.can0.recv()
         rxdata, topic_name = self.can_msg_process(msg)
 
-        if topic_name is '/soten_flag':
+        if topic_name == '/soten_flag':
             txdata = Bool()
             txdata.data = bool(rxdata[0])
             self.publisher_dic[topic_name].publish(txdata)
