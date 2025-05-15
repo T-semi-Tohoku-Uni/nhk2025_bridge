@@ -106,12 +106,9 @@ class Ros2Can(Node):
         self.can_send(txdata_f32, "loading_speed")
 
     def pass_callback(self, rxdata):
-        if 0.0 == rxdata.data:
-            self.pass_flag = "0"
-        elif rxdata.data > 0.0:
-            self.pass_flag = "1"
-        elif rxdata.data < 0.0:
-            self.pass_flag = "2"
+        pass_speed = rxdata.data
+        txdata_f32 = [pass_speed, 0, 0]
+        self.can_send(txdata_f32, 'pass_speed')
 
     def defence_callback(self, rxdata):
         if rxdata.data:
