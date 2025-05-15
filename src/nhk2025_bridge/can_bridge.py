@@ -32,6 +32,7 @@ class CanBridge(Node):
 
     def canid_setup(self):
         self.canid_dic = {
+            '/swervedrive_state':0x203,
             '/soten_flag':0x206
         }
 
