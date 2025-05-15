@@ -26,18 +26,6 @@ class Ros2Can(Node):
             self.tur_callback,
             10
         )
-        self.subscriber_soten = self.create_subscription(
-            Bool,
-            "/soten_flag",
-            self.soten_callback,
-            10
-        )
-        self.subscriber_soten_back = self.create_subscription(
-            Bool,
-            "/soten_flag_back",
-            self.soten_back_callback,
-            10
-        )
         self.subscriber_velt = self.create_subscription(
             Float32List,
             "/velt_speed",
@@ -69,15 +57,12 @@ class Ros2Can(Node):
             "turret_angle":0x302,
             "velt_speed":0x303,
             "brake":0x304,
-            "swervedrive_state":0x203,
             "soten_flag":0x206,
             "pass_speed":0x207
         }
 
         self.subscriber_vel
         self.subscriber_tur
-        self.subscriber_soten
-        self.subscriber_soten_back
         self.subscriber_velt
         self.subscriber_pass
         self.state_bogai
