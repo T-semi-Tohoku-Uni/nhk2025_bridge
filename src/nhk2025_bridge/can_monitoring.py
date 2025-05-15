@@ -45,3 +45,15 @@ class CanMonitor(Node):
             self.can_state = False
         self.txdata_can_state.data = self.can_state
         self.publisher_can_state.publish(self.txdata_can_state)
+
+
+def main_can_monitor():
+    rclpy.init()
+    can_monitor = CanMonitor()
+    try:
+        rclpy.spin(can_monitor)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        can_monitor.destroy_node()
+        rclpy.shutdown()
