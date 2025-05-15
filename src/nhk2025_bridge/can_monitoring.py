@@ -55,5 +55,6 @@ def main_can_monitor():
     except KeyboardInterrupt:
         pass
     finally:
+        can_monitor.can0.shutdown()
         can_monitor.destroy_node()
         rclpy.shutdown()
