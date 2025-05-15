@@ -45,6 +45,12 @@ class Ros2Can(Node):
             self.velt_callback,
             10
         )
+        self.subscriber_soten = self.create_subscription(
+            Float32,
+            '/loading_speed',
+            self.soten_callback,
+            10
+        )
         self.subscriber_pass = self.create_subscription(
             Float32,
             "/pass_speed",
@@ -93,12 +99,11 @@ class Ros2Can(Node):
         velt_speed_down_f32 = rxdata.num[1]
         txdata_f32 = [velt_speed_up_f32, velt_speed_down_f32]
         self.can_send(txdata_f32, "velt_speed")
-
+        
     def soten_callback(self, rxdata):
-        self.soten_flag = str(int(rxdata.data))
-
-    def soten_back_callback(self, rxdata):
-        self.soten_flag_back = str(int(rxdata.data))
+        loading_speed = rxdata.data
+        txdata_f32 = [loading_speed, 0, 0]
+        self.can_send(txdata_f32, "loading_speed")
 
     def pass_callback(self, rxdata):
         if 0.0 == rxdata.data:
