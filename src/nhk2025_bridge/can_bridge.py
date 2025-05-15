@@ -36,7 +36,8 @@ class CanBridge(Node):
         }
 
     def ros2_setup(self):
-        self.publisher_sotenflag = self.create_publisher(
+        self.publisher = {}
+        self.publisher['/soten_flag'] = self.create_publisher(
             Bool,
             '/soten_flag',
             10
@@ -45,10 +46,12 @@ class CanBridge(Node):
     def __call__(self):
         msg = self.can0.recv()
         rxdata_f32 = self.bridge.nhk2025_byte_to_f32(msg.data)
-        topic_name = msg.arbitration_id
+        topic_name_candidate = [k for k, v in self.canid_dic.items() if v == msg.arbitration_id]
+        if topic_name_candidate:
+            topic_name = topic_name_candidate[0]
 
         txdata = Bool()
-        self.publisher_sotenflag.publish(txdata)
+        self.publisher['/soten_flag'].publish(txdata)
 
 
 def main_canbridge():
