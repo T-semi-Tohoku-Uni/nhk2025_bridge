@@ -43,17 +43,20 @@ class CanBridge(Node):
             10
         )
 
-    def __call__(self):
-        msg = self.can0.recv()
+    def can_msg_process(self, msg:can.Message):
         rxdata_f32 = self.bridge.nhk2025_byte_to_f32(msg.data)
-        
         topic_name_candidate = [k for k, v in self.canid_dic.items() if v == msg.arbitration_id]
         if topic_name_candidate:
             topic_name = topic_name_candidate[0]
+        return rxdata_f32, topic_name
+
+    def __call__(self):
+        msg = self.can0.recv()
+        rxdata, topic_name = self.can_msg_process(msg)
 
         if topic_name is '/soten_flag':
             txdata = Bool()
-            txdata.data = bool(rxdata_f32[0])
+            txdata.data = bool(rxdata[0])
             self.publisher_dic[topic_name].publish(txdata)
 
 
