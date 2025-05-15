@@ -42,8 +42,13 @@ class CanBridge(Node):
             10
         )
 
-    def __call__(self, msg:can.Message):
+    def __call__(self):
+        msg = self.can0.recv()
         rxdata_f32 = self.bridge.nhk2025_byte_to_f32(msg.data)
+        topic_name = msg.arbitration_id
+
+        txdata = Bool()
+        self.publisher_sotenflag.publish(txdata)
 
 
 def main_canbridge():
@@ -52,7 +57,7 @@ def main_canbridge():
     
     try:
         while True:
-            can_bridge(can_bridge.can0.recv())
+            can_bridge()
     except KeyboardInterrupt:
             pass
     finally:
