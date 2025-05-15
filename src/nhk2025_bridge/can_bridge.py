@@ -8,6 +8,15 @@ from nhk2025_bridge.byte_control import ValueBridge
 class CanBridge(Node):
     def __init__(self):
         self.bridge = ValueBridge()
+        self.stmid_dic = {
+            "suspension":1,
+            "hoto":2,
+            "defence":4,
+            "dronesc":5
+        }
+        self.stmcanid_dic = {}
+        for stm in self.stmid_dic:
+            self.stmcanid_dic[stm] = 0x101 + self.stmid_dic[stm]*16
         super().__init__('can_bridge')
         self.can0 = can.interface.Bus(channel='can0', bustype='socketcan', bitrate=1000000, fd=True, data_bitrate=2000000)
         self.publisher_soten = self.create_publisher(
