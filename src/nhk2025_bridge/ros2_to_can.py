@@ -63,12 +63,19 @@ class Ros2Can(Node):
             self.defence_callback,
             10
         )
+        self.subscriber_brake = self.create_subscription(
+            Bool,
+            '/brake_flag',
+            self.brake_callback,
+            10
+        )
 
         self.subscriber_vel
         self.subscriber_tur
         self.subscriber_velt
         self.subscriber_pass
         self.state_bogai
+        self.subscriber_brake
 
     def can_send(self, txdata_list:list, msg_name:str):
         txdata_byte_list = self.bridge.nhk2025_f32_to_byte(txdata_list)
@@ -114,6 +121,11 @@ class Ros2Can(Node):
         defence_flag = int(rxdata.data)
         txdata_f32 = [defence_flag, 0, 0]
         self.can_send(txdata_f32, 'defence')
+
+    def brake_callback(self, rxdata):
+        brake_flag = int(rxdata.data)
+        txdata_f32 = [brake_flag, 0, 0]
+        self.can_send(txdata_f32, 'brake')
             
 
 
