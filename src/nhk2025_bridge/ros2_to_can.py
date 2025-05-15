@@ -14,6 +14,19 @@ class Ros2Can(Node):
         self.bridge = ValueBridge()
         super().__init__('ros2_to_can')
         self.can0 = can.interface.Bus(channel='can0', bustype='socketcan', bitrate=1000000, fd=True, data_bitrate=2000000)
+        self.ros2_setup()
+
+        self.canid_dic = {
+            "vel":0x300,
+            "loading_speed":0x301,
+            "turret_angle":0x302,
+            "velt_speed":0x303,
+            "brake":0x304,
+            "soten_flag":0x206,
+            "pass_speed":0x207
+        }
+
+    def ros2_setup(self):
         self.subscriber_vel = self.create_subscription(
             Pose2D,
             "/robot_vel",
@@ -38,35 +51,17 @@ class Ros2Can(Node):
             self.pass_callback,
             10
         )
-        self.state_kaihei = self.create_subscription(
-            Bool,
-            "/state_kaihei",
-            self.kaihei_callback,
-            10
-        )
         self.state_bogai = self.create_subscription(
             Bool,
             "/state_defence",
             self.defence_callback,
             10
         )
-
-        self.canid_dic = {
-            "vel":0x300,
-            "loading_speed":0x301,
-            "turret_angle":0x302,
-            "velt_speed":0x303,
-            "brake":0x304,
-            "soten_flag":0x206,
-            "pass_speed":0x207
-        }
-
         self.subscriber_vel
         self.subscriber_tur
         self.subscriber_velt
         self.subscriber_pass
         self.state_bogai
-        self.state_kaihei
 
     def can_send(self, txdata_list:list, msg_name:str):
         txdata_byte_list = self.bridge.nhk2025_f32_to_byte(txdata_list)
