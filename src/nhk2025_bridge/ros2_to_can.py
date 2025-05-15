@@ -57,6 +57,7 @@ class Ros2Can(Node):
             self.defence_callback,
             10
         )
+
         self.subscriber_vel
         self.subscriber_tur
         self.subscriber_velt
@@ -87,19 +88,17 @@ class Ros2Can(Node):
         txdata_f32 = [tur_ele, tur_azi, 0]
         self.can_send(txdata_f32, "turret_angle")
 
+    def velt_callback(self, rxdata):
+        velt_speed_up_f32 = rxdata.num[0]
+        velt_speed_down_f32 = rxdata.num[1]
+        txdata_f32 = [velt_speed_up_f32, velt_speed_down_f32]
+        self.can_send(txdata_f32, "velt_speed")
+
     def soten_callback(self, rxdata):
         self.soten_flag = str(int(rxdata.data))
 
     def soten_back_callback(self, rxdata):
         self.soten_flag_back = str(int(rxdata.data))
-
-    def velt_callback(self, rxdata):
-        velt_speed_up_f32 = rxdata.num[0]
-        velt_speed_down_f32 = rxdata.num[1]
-        self.velt_speed_up = "{:+.3g}".format(velt_speed_up_f32/10)
-        self.velt_speed_down = "{:+.3g}".format(velt_speed_down_f32/10)
-        self.velt_speed_up = self.velt_speed_up.zfill(4)
-        self.velt_speed_down = self.velt_speed_down.zfill(4)
 
     def pass_callback(self, rxdata):
         if 0.0 == rxdata.data:
