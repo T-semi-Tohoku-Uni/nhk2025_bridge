@@ -32,7 +32,7 @@ class CanBridge(Node):
 
     def canid_setup(self):
         self.canid_dic = {
-            "soten":0x206
+            '/soten_flag':0x206
         }
 
     def ros2_setup(self):
