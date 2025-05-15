@@ -108,10 +108,6 @@ class Ros2Can(Node):
         elif rxdata.data < 0.0:
             self.pass_flag = "2"
 
-    def kaihei_callback(self, rxdata):
-        if rxdata.data:
-            self.status_kaihei = "1"
-
     def defence_callback(self, rxdata):
         if rxdata.data:
             self.status_bougai = "1"
