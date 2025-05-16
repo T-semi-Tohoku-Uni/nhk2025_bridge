@@ -167,4 +167,5 @@ def main_ros2_to_can():
         pass
     finally:
         ros2_to_can.destroy_node()
-        rclpy.shutdown()
+        if rclpy.ok():
+            rclpy.shutdown()

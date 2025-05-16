@@ -60,4 +60,5 @@ def main_can_monitor():
         pass
     finally:
         can_monitor.destroy_node()
-        rclpy.shutdown()
+        if rclpy.ok():
+            rclpy.shutdown()

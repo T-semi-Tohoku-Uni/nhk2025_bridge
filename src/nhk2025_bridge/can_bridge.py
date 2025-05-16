@@ -73,4 +73,5 @@ def main_canbridge():
     except KeyboardInterrupt:
             pass
     finally:
-        rclpy.shutdown()
+        if rclpy.ok():
+            rclpy.shutdown()
