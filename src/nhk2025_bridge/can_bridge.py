@@ -48,8 +48,10 @@ class CanBridge(Node):
         rxdata_f32 = self.bridge.nhk2025_byte_to_f32(msg.data)
         topic_name_candidate = [k for k, v in self.canid_dic.items() if v == msg.arbitration_id]
         if topic_name_candidate:
-            topic_name = topic_name_candidate[0]
-        return rxdata_f32, topic_name
+            topic_name_c = topic_name_candidate[0]
+        else:
+            topic_name_c = None
+        return rxdata_f32, topic_name_c
 
     def __call__(self):
         while True:
