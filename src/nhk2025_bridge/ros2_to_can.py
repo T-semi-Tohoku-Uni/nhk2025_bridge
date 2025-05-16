@@ -13,7 +13,13 @@ class Ros2Can(Node):
     def __init__(self):
         self.bridge = ValueBridge()
         super().__init__('ros2_to_can')
-        self.can0 = can.interface.Bus(channel='can0', bustype='socketcan', bitrate=1000000, fd=True, data_bitrate=2000000)
+        self.can0 = can.interface.Bus(
+            channel='can0',
+            bustype='socketcan',
+            bitrate=1000000,
+            fd=True,
+            data_bitrate=2000000
+        )
         self.subscriber_setup()
         self.state_control_setup()
 
@@ -107,41 +113,41 @@ class Ros2Can(Node):
             self.txdata_can_state.data = self.can_state
             self.publisher_can_state.publish(self.txdata_can_state)
 
-    def vel_callback(self, rxdata):
+    def vel_callback(self, rxdata:Pose2D):
         vx    = rxdata.x
         vy    = rxdata.y
         omega = rxdata.theta
         txdata_f32 = [vx, vy, omega]
         self.can_send(txdata_f32, '/vel')
 
-    def tur_callback(self, rxdata):
+    def tur_callback(self, rxdata:Float32List):
         tur_ele = rxdata.num[0]
         tur_azi = rxdata.num[1]
         txdata_f32 = [tur_ele, tur_azi, 0]
         self.can_send(txdata_f32, '/turret_angle')
 
-    def velt_callback(self, rxdata):
+    def velt_callback(self, rxdata:Float32List):
         velt_speed_up_f32 = rxdata.num[0]
         velt_speed_down_f32 = rxdata.num[1]
         txdata_f32 = [velt_speed_up_f32, velt_speed_down_f32]
         self.can_send(txdata_f32, '/velt_speed')
         
-    def soten_callback(self, rxdata):
+    def soten_callback(self, rxdata:Float32):
         loading_speed = rxdata.data
         txdata_f32 = [loading_speed, 0, 0]
         self.can_send(txdata_f32, '/loading_speed')
 
-    def pass_callback(self, rxdata):
+    def pass_callback(self, rxdata:Float32):
         pass_speed = rxdata.data
         txdata_f32 = [pass_speed, 0, 0]
         self.can_send(txdata_f32, '/pass_speed')
 
-    def defence_callback(self, rxdata):
+    def defence_callback(self, rxdata:Bool):
         defence_flag = int(rxdata.data)
         txdata_f32 = [defence_flag, 0, 0]
         self.can_send(txdata_f32, '/defence')
 
-    def brake_callback(self, rxdata):
+    def brake_callback(self, rxdata:Bool):
         brake_flag = int(rxdata.data)
         txdata_f32 = [brake_flag, 0, 0]
         self.can_send(txdata_f32, '/brake_flag')
