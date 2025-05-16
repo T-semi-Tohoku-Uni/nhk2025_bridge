@@ -145,6 +145,10 @@ class Ros2Can(Node):
         brake_flag = int(rxdata.data)
         txdata_f32 = [brake_flag, 0, 0]
         self.can_send(txdata_f32, 'brake')
+
+    def destroy_node(self):
+        self.can0.shutdown()
+        super().destroy_node()
             
 
 
@@ -156,6 +160,5 @@ def main_ros2_to_can():
     except KeyboardInterrupt:
         pass
     finally:
-        ros2_to_can.can0.shutdown()
         ros2_to_can.destroy_node()
         rclpy.shutdown()

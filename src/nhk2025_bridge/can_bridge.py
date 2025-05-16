@@ -52,13 +52,14 @@ class CanBridge(Node):
         return rxdata_f32, topic_name
 
     def __call__(self):
-        msg = self.can0.recv()
-        rxdata, topic_name = self.can_msg_process(msg)
+        while True:
+            msg = self.can0.recv()
+            rxdata, topic_name = self.can_msg_process(msg)
 
-        if topic_name == '/soten_flag':
-            txdata = Bool()
-            txdata.data = bool(rxdata[0])
-            self.publisher_dic[topic_name].publish(txdata)
+            if topic_name == '/soten_flag':
+                txdata = Bool()
+                txdata.data = bool(rxdata[0])
+                self.publisher_dic[topic_name].publish(txdata)
 
 
 def main_canbridge():
@@ -66,8 +67,7 @@ def main_canbridge():
     can_bridge = CanBridge()
     
     try:
-        while True:
-            can_bridge()
+        can_bridge()
     except KeyboardInterrupt:
             pass
     finally:
