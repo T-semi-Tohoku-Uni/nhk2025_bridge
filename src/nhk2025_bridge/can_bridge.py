@@ -32,15 +32,15 @@ class CanBridge(Node):
 
     def canid_setup(self):
         self.canid_dic = {
-            '/swervedrive_state':0x203,
-            '/soten_flag':0x206
+            'swervedrive_state':0x203,
+            'soten_flag':0x206
         }
 
     def ros2_setup(self):
         self.publisher_dic = {}
-        self.publisher_dic['/soten_flag'] = self.create_publisher(
+        self.publisher_dic['soten_flag'] = self.create_publisher(
             Bool,
-            '/soten_flag',
+            'soten_flag',
             10
         )
 
@@ -58,7 +58,7 @@ class CanBridge(Node):
             msg = self.can0.recv()
             rxdata, topic_name = self.can_msg_process(msg)
 
-            if topic_name == '/soten_flag':
+            if topic_name == 'soten_flag':
                 txdata = Bool()
                 txdata.data = bool(rxdata[0])
                 self.publisher_dic[topic_name].publish(txdata)

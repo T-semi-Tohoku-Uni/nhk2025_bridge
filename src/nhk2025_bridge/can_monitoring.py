@@ -16,7 +16,7 @@ class CanMonitor(Node):
     def ros2_setup(self):
         self.publisher_can_state = self.create_publisher(
             Bool,
-            '/can_state',
+            'can_state',
             10
         )
         self.timer = self.create_timer(
