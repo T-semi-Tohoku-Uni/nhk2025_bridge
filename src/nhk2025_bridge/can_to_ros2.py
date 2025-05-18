@@ -45,6 +45,8 @@ class Can2Ros2(Node):
         )
 
     def can_msg_process(self, msg:can.Message):
+        if len(msg.data) != 12:
+            return None, None
         rxdata_f32 = self.bridge.nhk2025_byte_to_f32(msg.data)
         topic_name_candidate = [k for k, v in self.canid_dic.items() if v == msg.arbitration_id]
         if topic_name_candidate:
