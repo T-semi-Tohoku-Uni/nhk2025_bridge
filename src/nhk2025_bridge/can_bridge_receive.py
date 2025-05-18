@@ -28,6 +28,17 @@ class CanReceive(Node):
             txdata = self.candata_to_ros2(msg)
             self.publisher_can.publish(txdata)
 
+    def __del__(self):
+        self.can0.shutdown()
+        self.destroy_node()
+
 def main_can_receive():
     rclpy.init()
-    
+    can_receive = CanReceive()
+    try:
+        can_receive()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        if rclpy.ok():
+            rclpy.shutdown()
