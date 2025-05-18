@@ -5,7 +5,7 @@ from std_msgs.msg import Bool
 import can
 from nhk2025_bridge.byte_control import ValueBridge
 
-class CanBridge(Node):
+class Can2Ros2(Node):
     def __init__(self):
         self.bridge = ValueBridge()
         self.stm_setup()
@@ -64,9 +64,9 @@ class CanBridge(Node):
                 self.publisher_dic[topic_name].publish(txdata)
 
 
-def main_canbridge():
+def main_can_to_ros2():
     rclpy.init()
-    can_bridge = CanBridge()
+    can_bridge = Can2Ros2()
     
     try:
         can_bridge()
