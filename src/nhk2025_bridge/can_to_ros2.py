@@ -44,11 +44,11 @@ class Can2Ros2(Node):
             10
         )
 
-    def can_msg_process(self, msg:can.Message):
-        if len(msg.data) != 12:
+    def can_msg_process(self):
+        if len(self.msg.data) != 12:
             return None, None
-        rxdata_f32 = self.bridge.nhk2025_byte_to_f32(msg.data)
-        topic_name_candidate = [k for k, v in self.canid_dic.items() if v == msg.arbitration_id]
+        rxdata_f32 = self.bridge.nhk2025_byte_to_f32(self.msg.data)
+        topic_name_candidate = [k for k, v in self.canid_dic.items() if v == self.msg.arbitration_id]
         if topic_name_candidate:
             topic_name_c = topic_name_candidate[0]
         else:
@@ -57,8 +57,8 @@ class Can2Ros2(Node):
 
     def __call__(self):
         while True:
-            msg = self.can0.recv()
-            rxdata, topic_name = self.can_msg_process(msg)
+            self.msg = self.can0.recv()
+            rxdata, topic_name = self.can_msg_process()
 
             if topic_name == 'soten_flag':
                 txdata = Bool()
