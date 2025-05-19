@@ -1,6 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Bool
+from nhk2025_custom_message.msg import Float32List
 
 import can
 from nhk2025_bridge.byte_control import ValueBridge
@@ -32,8 +33,9 @@ class Can2Ros2(Node):
 
     def canid_setup(self):
         self.canid_dic = {
-            'swervedrive_state':0x203,
-            'soten_flag':0x206
+            'swervedrive_angle':0x203,
+            'soten_flag':0x206,
+            'swervedrive_vel':0x208,
         }
 
     def ros2_setup(self):
@@ -41,6 +43,16 @@ class Can2Ros2(Node):
         self.publisher_dic['soten_flag'] = self.create_publisher(
             Bool,
             'soten_flag',
+            10
+        )
+        self.publisher_dic['swervedrive_angle'] = self.create_publisher(
+            Float32List,
+            'swervedrive_angle',
+            10
+        )
+        self.publisher_dic['swervedrive_vel'] = self.create_publisher(
+            Float32List,
+            'swervedrive_vel',
             10
         )
 
@@ -63,6 +75,22 @@ class Can2Ros2(Node):
             if topic_name == 'soten_flag':
                 txdata = Bool()
                 txdata.data = bool(rxdata[0])
+                self.publisher_dic[topic_name].publish(txdata)
+
+            if topic_name == 'swervedrive_angle':
+                txdata = Float32List()
+                txdata.num = [0, 0, 0]
+                txdata.num[0] = float(rxdata[0])
+                txdata.num[1] = float(rxdata[1])
+                txdata.num[2] = float(rxdata[2])
+                self.publisher_dic[topic_name].publish(txdata)
+
+            if topic_name == 'swervedrive_vel':
+                txdata = Float32List()
+                txdata.num = [0, 0, 0]
+                txdata.num[0] = float(rxdata[0])
+                txdata.num[1] = float(rxdata[1])
+                txdata.num[2] = float(rxdata[2])
                 self.publisher_dic[topic_name].publish(txdata)
 
 
