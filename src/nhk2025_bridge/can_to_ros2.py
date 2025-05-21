@@ -12,7 +12,7 @@ class Can2Ros2(Node):
         self.stm_setup()
         self.canid_setup()
         self.can0 = can.interface.Bus(channel='can0', bustype='socketcan', bitrate=1000000, fd=True, data_bitrate=2000000)
-        super().__init__('can_bridge')
+        super().__init__('can_to_ros2')
         self.ros2_setup()
         
 
