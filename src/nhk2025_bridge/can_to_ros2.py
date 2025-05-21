@@ -79,7 +79,7 @@ class Can2Ros2(Node):
 
             if topic_name == 'swervedrive_angle':
                 txdata = Float32List()
-                txdata.num = [0, 0, 0]
+                txdata.num = []
                 txdata.num[0] = float(rxdata[0])
                 txdata.num[1] = float(rxdata[1])
                 txdata.num[2] = float(rxdata[2])
@@ -87,7 +87,7 @@ class Can2Ros2(Node):
 
             if topic_name == 'swervedrive_vel':
                 txdata = Float32List()
-                txdata.num = [0, 0, 0]
+                txdata.num = []
                 txdata.num[0] = float(rxdata[0])
                 txdata.num[1] = float(rxdata[1])
                 txdata.num[2] = float(rxdata[2])
