@@ -29,6 +29,7 @@ class Ros2Can(Node):
             'turret_angle':0x302,
             'velt_speed':0x303,
             'brake_flag':0x304,
+            'defence_flag':0x305,
             'soten_flag':0x206,
             'pass_speed':0x207
         }
@@ -66,7 +67,7 @@ class Ros2Can(Node):
         )
         self.state_bogai = self.create_subscription(
             Bool,
-            'state_defence',
+            'defence_flag',
             self.defence_callback,
             10
         )
