@@ -146,7 +146,7 @@ class Ros2Can(Node):
     def defence_callback(self, rxdata:Bool):
         defence_flag = int(rxdata.data)
         txdata_f32 = [defence_flag, 0, 0]
-        self.can_send(txdata_f32, 'defence')
+        self.can_send(txdata_f32, 'defence_flag')
 
     def brake_callback(self, rxdata:Bool):
         brake_flag = int(rxdata.data)
