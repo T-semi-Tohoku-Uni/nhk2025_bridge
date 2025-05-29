@@ -14,10 +14,7 @@ find_package(rclpy REQUIRED)
 # find_package(<dependency> REQUIRED)
 ament_python_install_package(${PROJECT_NAME} PACKAGE_DIR src/${PROJECT_NAME})
 
-install(PROGRAMS scripts/can_to_ros2.py DESTINATION lib/${PROJECT_NAME})
-install(PROGRAMS scripts/ros2_to_can.py DESTINATION lib/${PROJECT_NAME})
-install(PROGRAMS scripts/can_monitor.py DESTINATION lib/${PROJECT_NAME})
-install(PROGRAMS scripts/can_init.py DESTINATION lib/${PROJECT_NAME})
+install(PROGRAMS scripts/joy24.py DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
