@@ -47,14 +47,18 @@ class WebsocketClient(Node):
         self.client_joy = WebSocketClientJoy(self.get_namespace(), '192.168.11.58', 9090)
         self.subscriber_ps5
 
-        self.axes_list = []
-        self.buttons_list = []
+        self.axes_list = [0, 0, 1, 0, 0, 1, 0, 0]
+        self.buttons_list = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
     def ps5_callback(self, rxdata:Joy):
+        self.ps5_time = rxdata.header.stamp.sec
         self.axes_list = list(rxdata.axes)
         self.buttons_list = list(rxdata.buttons)
 
     def timer_callback(self):
+        if (int(time.time()) - self.ps5_time) > 5:
+            self.axes_list = [0, 0, 1, 0, 0, 1, 0, 0]
+            self.buttons_list = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         self.client_joy.send(self.axes_list, self.buttons_list)
 
 
