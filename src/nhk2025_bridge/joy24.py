@@ -30,7 +30,7 @@ class WebSocketClientJoy():
     def destroy_client(self):
         self.joy_publisher.unadvertise()
         self.client.terminate()
-        
+
 class WebsocketClient(Node):
     def __init__(self):
         super().__init__('websocket_client')
@@ -40,10 +40,23 @@ class WebsocketClient(Node):
             self.ps5_callback,
             10
         )
+        self.timer_publish = self.create_timer(
+            0.05,
+            self.timer_callback
+        )
+        self.client_joy = WebSocketClientJoy(self.get_namespace(), '192.168.11.58', 9090)
+        self.subscriber_ps5
 
+        self.axes_list = []
+        self.buttons_list = []
 
     def ps5_callback(self, rxdata:Joy):
-        headeer = rxdata.header
+        self.axes_list = list(rxdata.axes)
+        self.buttons_list = list(rxdata.buttons)
+
+    def timer_callback(self):
+        self.client_joy.send(self.axes_list, self.buttons_list)
+
 
 
 def main_24():
