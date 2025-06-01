@@ -1,5 +1,4 @@
 import rclpy
-import rclpy.clock
 from rclpy.node import Node
 from builtin_interfaces.msg import Time
 from rclpy.time import Time as RclpyTime, Duration as RclpyDuration
@@ -13,25 +12,26 @@ class StampMonitor(Node):
             self.stamp_callback,
             10
         )
-        self.timer  =self.create_timer(
+        self.timer = self.create_timer(
             0.1,
             self.timer_callback
         )
         self.subscriber_stamp
-        self.client_time = self.get_clock().now()
+        self.connect_flag = False
 
     def stamp_callback(self, rxdata:Time):
+        self.connect_flag = True
         self.client_time = RclpyTime.from_msg(rxdata)
 
     def timer_callback(self):
-        now = self.client_time = self.get_clock().now()
-        disconnect_time_diff = now - self.client_time
+        now = self.get_clock().now()
 
-        if disconnect_time_diff > RclpyDuration(seconds=0.5):
+        if self.connect_flag is False:
             self.get_logger().info('disconnect!!')
-
         else:
-            self.get_logger().info('connect')
+            disconnect_time_diff = now - self.client_time
+            if disconnect_time_diff > RclpyDuration(seconds=0, nanoseconds=500_000_000):
+                self.get_logger().info('disconnect!!')
 
         
 def main_stamp_monitor():
