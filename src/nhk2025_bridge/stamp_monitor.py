@@ -27,7 +27,7 @@ class StampMonitor(Node):
         now = self.get_clock().now()
 
         if self.connect_flag is False:
-            self.get_logger().info('disconnect!!')
+            self.get_logger().info('connecting...')
         else:
             disconnect_time_diff = now - self.client_time
             if disconnect_time_diff > RclpyDuration(seconds=0, nanoseconds=500_000_000):
