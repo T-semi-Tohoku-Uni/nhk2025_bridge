@@ -19,6 +19,7 @@ install(PROGRAMS scripts/ros2_to_can.py DESTINATION lib/${PROJECT_NAME})
 install(PROGRAMS scripts/can_monitor.py DESTINATION lib/${PROJECT_NAME})
 install(PROGRAMS scripts/can_init.py DESTINATION lib/${PROJECT_NAME})
 install(PROGRAMS scripts/stamp_now.py DESTINATION lib/${PROJECT_NAME})
+install(PROGRAMS scripts/stamp_monitor.py DESTINATION lib/${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
