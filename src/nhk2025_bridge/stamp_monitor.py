@@ -36,7 +36,7 @@ class StampMonitor(Node):
         txdata = Joy()
         txdata.header.stamp = now.to_msg()
         txdata.header.frame_id = 'joy'
-        txdata.axes = [0, 0, 1, 0, 0, 1, 0, 0]
+        txdata.axes = [0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0]
         txdata.buttons = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         if self.connect_flag is False:
             self.get_logger().info('connecting...')
