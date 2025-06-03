@@ -1,6 +1,8 @@
 import rclpy
 from rclpy.node import Node
+
 from builtin_interfaces.msg import Time
+from sensor_msgs.msg import Joy
 from rclpy.time import Time as RclpyTime, Duration as RclpyDuration
 
 class StampMonitor(Node):
@@ -10,6 +12,11 @@ class StampMonitor(Node):
             Time,
             'stamp',
             self.stamp_callback,
+            10
+        )
+        self.ps5_publihser = self.create_publisher(
+            Joy,
+            '/joy',
             10
         )
         self.timer = self.create_timer(
@@ -26,12 +33,19 @@ class StampMonitor(Node):
     def timer_callback(self):
         now = self.get_clock().now()
 
+        txdata = Joy()
+        txdata.header.stamp = now.to_msg()
+        txdata.header.frame_id = 'joy'
+        txdata.axes = [0, 0, 1, 0, 0, 1, 0, 0]
+        txdata.buttons = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         if self.connect_flag is False:
             self.get_logger().info('connecting...')
+            self.ps5_publihser.publish(txdata)
         else:
             disconnect_time_diff = now - self.client_time
             if disconnect_time_diff > RclpyDuration(seconds=0, nanoseconds=500_000_000):
                 self.get_logger().info('disconnect!!')
+                self.ps5_publihser.publish(txdata)
 
         
 def main_stamp_monitor():
